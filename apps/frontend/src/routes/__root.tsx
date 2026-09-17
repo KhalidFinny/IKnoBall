@@ -46,7 +46,8 @@ export const Route = createRootRoute({
     const isOnboarding = pathname.startsWith('/onboarding');
     const isDashboard = pathname.startsWith('/dashboard');
     const hideHeader =
-      isOnboarding || isDashboard ||
+      isOnboarding ||
+      isDashboard ||
       pathname.startsWith('/predict') ||
       pathname.startsWith('/profile') ||
       pathname.startsWith('/game');

@@ -1,9 +1,5 @@
 import { useMemo } from 'react';
-import {
-  useLeagueGamesNext,
-  useLeagueGamesPrevious,
-  useLeagueGamesRange,
-} from './api';
+import { useLeagueGamesNext, useLeagueGamesPrevious, useLeagueGamesRange } from './api';
 import type { Game } from './api';
 
 function shiftDate(days: number): string {
@@ -18,10 +14,7 @@ function shiftDate(days: number): string {
  * small index from the available league queries.
  */
 export function useGameById(gameId: string | undefined) {
-  const { from, to } = useMemo(
-    () => ({ from: shiftDate(-200), to: shiftDate(200) }),
-    [],
-  );
+  const { from, to } = useMemo(() => ({ from: shiftDate(-200), to: shiftDate(200) }), []);
 
   const range = useLeagueGamesRange(from, to, !!gameId);
   const previous = useLeagueGamesPrevious(!!gameId);

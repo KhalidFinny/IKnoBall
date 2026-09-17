@@ -10,7 +10,7 @@ function FormDots({ record }: { record?: TeamRecord | null }) {
   return (
     <div className="flex items-center gap-1.5">
       {record.lastGames.map((g, i) => {
-        const won = (g.isHome ? g.ourScore > g.oppScore : g.ourScore > g.oppScore);
+        const won = g.isHome ? g.ourScore > g.oppScore : g.ourScore > g.oppScore;
         return (
           <span
             key={i}
@@ -128,9 +128,7 @@ export function TeamCard({
             <p className="font-heading text-2xl font-black leading-none tabular-nums text-brand-ink">
               {record ? `${record.wins}-${record.losses}` : '—'}
             </p>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-stone-400">
-              Record
-            </p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-stone-400">Record</p>
           </div>
           <div>
             <p className="text-sm font-semibold text-stone-500">Last 5</p>

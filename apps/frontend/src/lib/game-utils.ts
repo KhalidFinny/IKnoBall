@@ -87,7 +87,11 @@ export function formatTimeET(dateStr: string): string {
   try {
     const d = new Date(dateStr);
     if (Number.isNaN(d.getTime())) return '';
-    return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' });
+    return d.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZone: 'America/New_York',
+    });
   } catch {
     return '';
   }

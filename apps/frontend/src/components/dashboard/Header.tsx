@@ -161,7 +161,10 @@ export function DashboardHeader({
               key={item.key}
               to="/predict"
               className="flex-1 rounded-lg px-3 py-2 text-center text-sm font-bold uppercase tracking-widest"
-              style={{ backgroundColor: active === item.key ? '#0A2250' : undefined, color: active === item.key ? '#fff' : '#78716c' }}
+              style={{
+                backgroundColor: active === item.key ? '#0A2250' : undefined,
+                color: active === item.key ? '#fff' : '#78716c',
+              }}
               aria-current={active === item.key ? 'page' : undefined}
             >
               {item.label}
@@ -172,7 +175,10 @@ export function DashboardHeader({
               to="/dashboard"
               search={{ tab: 'team' }}
               className="flex-1 rounded-lg px-3 py-2 text-center text-sm font-bold uppercase tracking-widest"
-              style={{ backgroundColor: active === item.key ? '#0A2250' : undefined, color: active === item.key ? '#fff' : '#78716c' }}
+              style={{
+                backgroundColor: active === item.key ? '#0A2250' : undefined,
+                color: active === item.key ? '#fff' : '#78716c',
+              }}
               aria-current={active === item.key ? 'page' : undefined}
             >
               {item.label}

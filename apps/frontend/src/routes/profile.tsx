@@ -167,11 +167,7 @@ function ProfilePage() {
                 />
               </div>
 
-              <Panel
-                title="My Predictions"
-                className="overflow-hidden"
-                contentClassName="!p-0"
-              >
+              <Panel title="My Predictions" className="overflow-hidden" contentClassName="!p-0">
                 <div className="flex items-center justify-end border-b border-brand-line px-5 py-2">
                   <span className="rounded-full bg-stone-100 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-stone-500">
                     {upcomingPicks.length} open · {sortedHistory.length} total
@@ -246,7 +242,9 @@ function ProfilePage() {
                     </p>
                   </div>
                   <div>
-                    <p className="truncate text-sm font-semibold text-brand-ink">{team.headCoach}</p>
+                    <p className="truncate text-sm font-semibold text-brand-ink">
+                      {team.headCoach}
+                    </p>
                     <p className="text-[10px] font-bold uppercase tracking-widest text-stone-400">
                       Head Coach
                     </p>
@@ -281,9 +279,9 @@ function HistoryRow({
   const { away, home } = useMemo(() => resolveGameTeams(game, lookup), [game, lookup]);
   const status = getGameStatus(game);
   const awayAbbr =
-    away?.abbreviation ?? (game.awayTricode ?? game.awayTeam.slice(0, 3).toUpperCase());
+    away?.abbreviation ?? game.awayTricode ?? game.awayTeam.slice(0, 3).toUpperCase();
   const homeAbbr =
-    home?.abbreviation ?? (game.homeTricode ?? game.homeTeam.slice(0, 3).toUpperCase());
+    home?.abbreviation ?? game.homeTricode ?? game.homeTeam.slice(0, 3).toUpperCase();
   const picked = pred.pick === 'away' ? awayAbbr : homeAbbr;
 
   let resultLabel: string;

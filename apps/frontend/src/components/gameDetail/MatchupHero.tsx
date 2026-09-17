@@ -1,17 +1,15 @@
 import { useMemo } from 'react';
 import { ArrowLeft, Clock, MapPin } from 'lucide-react';
 import type { Game, TeamWithLeaders } from '../../lib/api';
-import {
-  formatGameDate,
-  formatTimeET,
-  getGameStatus,
-  getSeasonBadge,
-} from '../../lib/game-utils';
+import { formatGameDate, formatTimeET, getGameStatus, getSeasonBadge } from '../../lib/game-utils';
 
 function statusPill(g: Game): { text: string; cls: string } {
   const status = getGameStatus(g);
   if (status === 'final')
-    return { text: `Final  ${g.awayScore ?? 0}–${g.homeScore ?? 0}`, cls: 'bg-stone-900 text-white' };
+    return {
+      text: `Final  ${g.awayScore ?? 0}–${g.homeScore ?? 0}`,
+      cls: 'bg-stone-900 text-white',
+    };
   if (status === 'live')
     return {
       text: `● Live  ${g.awayScore ?? 0}–${g.homeScore ?? 0}`,
@@ -36,8 +34,10 @@ export function MatchupHero({
 
   const awayMark = away?.logoUrl ?? null;
   const homeMark = home?.logoUrl ?? null;
-  const awayAbbr = away?.abbreviation ?? (game.awayTricode ?? game.awayTeam.slice(0, 3).toUpperCase());
-  const homeAbbr = home?.abbreviation ?? (game.homeTricode ?? game.homeTeam.slice(0, 3).toUpperCase());
+  const awayAbbr =
+    away?.abbreviation ?? game.awayTricode ?? game.awayTeam.slice(0, 3).toUpperCase();
+  const homeAbbr =
+    home?.abbreviation ?? game.homeTricode ?? game.homeTeam.slice(0, 3).toUpperCase();
   const awayName = away?.teamName ?? game.awayTeam;
   const homeName = home?.teamName ?? game.homeTeam;
 
@@ -58,7 +58,10 @@ export function MatchupHero({
         />
         <div
           className="absolute inset-0"
-          style={{ backgroundColor: homeColor, clipPath: 'polygon(61% 0, 100% 0, 100% 100%, 41% 100%)' }}
+          style={{
+            backgroundColor: homeColor,
+            clipPath: 'polygon(61% 0, 100% 0, 100% 100%, 41% 100%)',
+          }}
         />
         <div
           className="absolute inset-0"

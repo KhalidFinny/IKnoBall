@@ -54,115 +54,115 @@ function LoginPage() {
         </div>
 
         <div className="px-8 py-6">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-semibold text-brand-ink">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-brand-line bg-white px-3 py-2.5 text-sm text-brand-ink placeholder-stone-400 outline-none transition-colors focus:border-brand-navy focus:ring-1 focus:ring-brand-navy"
-              placeholder="you@example.com"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-semibold text-brand-ink">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              required
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-brand-line bg-white px-3 py-2.5 text-sm text-brand-ink placeholder-stone-400 outline-none transition-colors focus:border-brand-navy focus:ring-1 focus:ring-brand-navy"
-              placeholder="••••••••"
-            />
-          </div>
-
-          {error && errorCode === 'EMAIL_NOT_VERIFIED' ? (
-            <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-3 text-sm">
-              <p className="font-medium text-amber-800">Email not verified</p>
-              <p className="mt-1 text-amber-700">
-                A new verification link has been sent to your email. Check your inbox or{' '}
-                <Link
-                  to="/auth/verify-email"
-                  search={{ email }}
-                  className="font-semibold underline underline-offset-2 hover:text-amber-900"
-                >
-                  resend it
-                </Link>
-                .
-              </p>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="email" className="mb-1 block text-sm font-semibold text-brand-ink">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                required
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-lg border border-brand-line bg-white px-3 py-2.5 text-sm text-brand-ink placeholder-stone-400 outline-none transition-colors focus:border-brand-navy focus:ring-1 focus:ring-brand-navy"
+                placeholder="you@example.com"
+              />
             </div>
-          ) : error ? (
-            <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
-              {error}
+
+            <div>
+              <label htmlFor="password" className="mb-1 block text-sm font-semibold text-brand-ink">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                required
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-lg border border-brand-line bg-white px-3 py-2.5 text-sm text-brand-ink placeholder-stone-400 outline-none transition-colors focus:border-brand-navy focus:ring-1 focus:ring-brand-navy"
+                placeholder="••••••••"
+              />
+            </div>
+
+            {error && errorCode === 'EMAIL_NOT_VERIFIED' ? (
+              <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-3 text-sm">
+                <p className="font-medium text-amber-800">Email not verified</p>
+                <p className="mt-1 text-amber-700">
+                  A new verification link has been sent to your email. Check your inbox or{' '}
+                  <Link
+                    to="/auth/verify-email"
+                    search={{ email }}
+                    className="font-semibold underline underline-offset-2 hover:text-amber-900"
+                  >
+                    resend it
+                  </Link>
+                  .
+                </p>
+              </div>
+            ) : error ? (
+              <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
+                {error}
+              </p>
+            ) : null}
+
+            <button
+              type="submit"
+              disabled={signIn.isPending}
+              className="w-full rounded-full bg-brand-navyDark px-4 py-3 text-sm font-extrabold uppercase tracking-widest text-white transition-colors hover:bg-brand-navy disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {signIn.isPending ? 'Signing in…' : 'Sign in'}
+            </button>
+          </form>
+
+          <div className="relative my-6 flex items-center">
+            <div className="flex-grow border-t border-brand-line" />
+            <span className="mx-3 text-xs font-medium uppercase tracking-wider text-stone-400">
+              or
+            </span>
+            <div className="flex-grow border-t border-brand-line" />
+          </div>
+
+          {discordError && (
+            <p className="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
+              {discordError}
             </p>
-          ) : null}
+          )}
 
           <button
-            type="submit"
-            disabled={signIn.isPending}
-            className="w-full rounded-full bg-brand-navyDark px-4 py-3 text-sm font-extrabold uppercase tracking-widest text-white transition-colors hover:bg-brand-navy disabled:cursor-not-allowed disabled:opacity-60"
+            type="button"
+            disabled={discordSignIn.isPending}
+            onClick={() => {
+              setDiscordError(null);
+              discordSignIn.mutate(undefined, {
+                onError: (err) => setDiscordError(err.message),
+              });
+            }}
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-[#5865F2] px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-[#4752C4] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {signIn.isPending ? 'Signing in…' : 'Sign in'}
+            <FaDiscord className="h-4 w-4 shrink-0" />
+            {discordSignIn.isPending ? 'Redirecting…' : 'Continue with Discord'}
           </button>
-        </form>
 
-        <div className="relative my-6 flex items-center">
-          <div className="flex-grow border-t border-brand-line" />
-          <span className="mx-3 text-xs font-medium uppercase tracking-wider text-stone-400">
-            or
-          </span>
-          <div className="flex-grow border-t border-brand-line" />
-        </div>
-
-        {discordError && (
-          <p className="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
-            {discordError}
-          </p>
-        )}
-
-        <button
-          type="button"
-          disabled={discordSignIn.isPending}
-          onClick={() => {
-            setDiscordError(null);
-            discordSignIn.mutate(undefined, {
-              onError: (err) => setDiscordError(err.message),
-            });
-          }}
-          className="flex w-full items-center justify-center gap-2 rounded-full bg-[#5865F2] px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-[#4752C4] disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          <FaDiscord className="h-4 w-4 shrink-0" />
-          {discordSignIn.isPending ? 'Redirecting…' : 'Continue with Discord'}
-        </button>
-
-        <div className="mt-5 flex flex-col items-center gap-2 text-sm text-stone-500">
-          <Link
-            to="/auth/forgot-password"
-            className="text-stone-600 underline-offset-2 hover:text-brand-navy hover:underline"
-          >
-            Forgot your password?
-          </Link>
-          <span>
-            No account?{' '}
+          <div className="mt-5 flex flex-col items-center gap-2 text-sm text-stone-500">
             <Link
-              to="/auth/register"
-              className="font-semibold text-brand-navy underline-offset-2 hover:text-brand-red hover:underline"
+              to="/auth/forgot-password"
+              className="text-stone-600 underline-offset-2 hover:text-brand-navy hover:underline"
             >
-              Create one
+              Forgot your password?
             </Link>
-          </span>
-        </div>
+            <span>
+              No account?{' '}
+              <Link
+                to="/auth/register"
+                className="font-semibold text-brand-navy underline-offset-2 hover:text-brand-red hover:underline"
+              >
+                Create one
+              </Link>
+            </span>
+          </div>
         </div>
       </div>
     </div>

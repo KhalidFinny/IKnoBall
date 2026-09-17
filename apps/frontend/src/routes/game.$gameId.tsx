@@ -6,11 +6,7 @@ import { LoadingSpinner, Panel } from '../components/dashboard/shared';
 import { MatchupHero } from '../components/gameDetail/MatchupHero';
 import { TeamCard } from '../components/gameDetail/TeamCard';
 import { PredictionPanel } from '../components/predict/PredictionPanel';
-import {
-  useTeamRecord,
-  useTeams,
-  useTopPlayers,
-} from '../lib/api';
+import { useTeamRecord, useTeams, useTopPlayers } from '../lib/api';
 import { useStandings } from '../lib/api';
 import { buildTeamLookup, resolveGameTeams } from '../lib/game-utils';
 import { useGameById } from '../lib/use-game';
@@ -84,7 +80,12 @@ function GameDetailPage() {
 
   return (
     <div className="min-h-screen bg-stone-200">
-      <DashboardHeader userName={user.name} accentColor={accentColor} onSignOut={handleSignOut} active="game" />
+      <DashboardHeader
+        userName={user.name}
+        accentColor={accentColor}
+        onSignOut={handleSignOut}
+        active="game"
+      />
 
       <div className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6">
         {isLoading && <LoadingSpinner />}
@@ -105,7 +106,12 @@ function GameDetailPage() {
 
         {!isLoading && game && (
           <div className="flex flex-col gap-6">
-            <MatchupHero game={game} away={away} home={home} onBack={() => navigate({ to: '/predict' })} />
+            <MatchupHero
+              game={game}
+              away={away}
+              home={home}
+              onBack={() => navigate({ to: '/predict' })}
+            />
 
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_380px]">
               {/* Left: matchup detail */}

@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Check, Lock, Trophy } from 'lucide-react';
 import type { Game, TeamWithLeaders } from '../../lib/api';
-import { buildTeamLookup, getGameStatus, getSeasonBadge, resolveGameTeams } from '../../lib/game-utils';
+import {
+  buildTeamLookup,
+  getGameStatus,
+  getSeasonBadge,
+  resolveGameTeams,
+} from '../../lib/game-utils';
 import { hexLuminance } from '../dashboard/shared';
 
 const STORAGE_KEY = 'iknoball.predictions.v1';
@@ -57,9 +62,11 @@ export function PredictionPanel({
   const homeColor = home?.primaryColor ?? '#1C4188';
 
   const awayAbbr =
-    (away?.abbreviation ?? (game.awayTricode ? game.awayTricode : game.awayTeam.slice(0, 3).toUpperCase()));
+    away?.abbreviation ??
+    (game.awayTricode ? game.awayTricode : game.awayTeam.slice(0, 3).toUpperCase());
   const homeAbbr =
-    (home?.abbreviation ?? (game.homeTricode ? game.homeTricode : game.homeTeam.slice(0, 3).toUpperCase()));
+    home?.abbreviation ??
+    (game.homeTricode ? game.homeTricode : game.homeTeam.slice(0, 3).toUpperCase());
 
   const awayName = away?.teamName ?? game.awayTeam;
   const homeName = home?.teamName ?? game.homeTeam;
@@ -188,14 +195,21 @@ export function PredictionPanel({
                   </span>
                 )}
                 {away?.logoUrl ? (
-                  <img src={away.logoUrl} alt={awayName} className="h-12 w-12 object-contain drop-shadow" loading="lazy" />
+                  <img
+                    src={away.logoUrl}
+                    alt={awayName}
+                    className="h-12 w-12 object-contain drop-shadow"
+                    loading="lazy"
+                  />
                 ) : (
                   <span className={`font-heading text-3xl font-black ${awayTx}`}>{awayAbbr}</span>
                 )}
                 <span className={`text-xs font-bold uppercase tracking-wide ${awayTx}`}>
                   {awayAbbr}
                 </span>
-                <span className={`text-[10px] font-black uppercase tracking-[0.18em] ${awayTx} opacity-80`}>
+                <span
+                  className={`text-[10px] font-black uppercase tracking-[0.18em] ${awayTx} opacity-80`}
+                >
                   Away
                 </span>
               </button>
@@ -222,14 +236,21 @@ export function PredictionPanel({
                   </span>
                 )}
                 {home?.logoUrl ? (
-                  <img src={home.logoUrl} alt={homeName} className="h-12 w-12 object-contain drop-shadow" loading="lazy" />
+                  <img
+                    src={home.logoUrl}
+                    alt={homeName}
+                    className="h-12 w-12 object-contain drop-shadow"
+                    loading="lazy"
+                  />
                 ) : (
                   <span className={`font-heading text-3xl font-black ${homeTx}`}>{homeAbbr}</span>
                 )}
                 <span className={`text-xs font-bold uppercase tracking-wide ${homeTx}`}>
                   {homeAbbr}
                 </span>
-                <span className={`text-[10px] font-black uppercase tracking-[0.18em] ${homeTx} opacity-80`}>
+                <span
+                  className={`text-[10px] font-black uppercase tracking-[0.18em] ${homeTx} opacity-80`}
+                >
                   Home
                 </span>
               </button>
@@ -238,7 +259,10 @@ export function PredictionPanel({
             {/* Confidence */}
             <div className="mt-5">
               <div className="flex items-center justify-between">
-                <label htmlFor="predict-confidence" className="text-sm font-semibold text-brand-ink">
+                <label
+                  htmlFor="predict-confidence"
+                  className="text-sm font-semibold text-brand-ink"
+                >
                   Confidence
                 </label>
                 <span className="font-heading text-xl font-black tabular-nums text-brand-navy">

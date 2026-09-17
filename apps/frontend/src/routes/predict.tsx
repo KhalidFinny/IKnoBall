@@ -42,8 +42,10 @@ function GameRow({
   const badge = getSeasonBadge(game);
   const locked = status !== 'scheduled';
 
-  const awayAbbr = away?.abbreviation ?? (game.awayTricode ?? game.awayTeam.slice(0, 3).toUpperCase());
-  const homeAbbr = home?.abbreviation ?? (game.homeTricode ?? game.homeTeam.slice(0, 3).toUpperCase());
+  const awayAbbr =
+    away?.abbreviation ?? game.awayTricode ?? game.awayTeam.slice(0, 3).toUpperCase();
+  const homeAbbr =
+    home?.abbreviation ?? game.homeTricode ?? game.homeTeam.slice(0, 3).toUpperCase();
   const awayName = away?.teamName ?? game.awayTeam;
   const homeName = home?.teamName ?? game.homeTeam;
 
@@ -169,7 +171,8 @@ function PredictPage() {
   const grouped: Map<string, Game[]> = new Map();
   for (const g of sorted) {
     const key =
-      g.gameDate ?? (g.gameDateTime ? new Date(g.gameDateTime).toISOString().slice(0, 10) : 'Unknown');
+      g.gameDate ??
+      (g.gameDateTime ? new Date(g.gameDateTime).toISOString().slice(0, 10) : 'Unknown');
     if (!grouped.has(key)) grouped.set(key, []);
     grouped.get(key)!.push(g);
   }
@@ -187,8 +190,8 @@ function PredictPage() {
             Predictions
           </h1>
           <p className="text-sm text-stone-500">
-            Pick the winner of each game before tip-off. Open a game for the full breakdown and
-            make an informed call — points are awarded for correct picks.
+            Pick the winner of each game before tip-off. Open a game for the full breakdown and make
+            an informed call — points are awarded for correct picks.
           </p>
         </div>
 

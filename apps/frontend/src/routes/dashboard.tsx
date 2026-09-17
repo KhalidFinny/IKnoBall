@@ -135,7 +135,12 @@ function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-stone-200">
-      <DashboardHeader userName={user.name} accentColor={team.primaryColor} onSignOut={handleSignOut} active="dashboard" />
+      <DashboardHeader
+        userName={user.name}
+        accentColor={team.primaryColor}
+        onSignOut={handleSignOut}
+        active="dashboard"
+      />
 
       <div className="mx-auto grid max-w-[1920px] grid-cols-1 items-start gap-6 px-6 py-6 xl:grid-cols-[288px_minmax(0,1fr)_288px]">
         <StandingsSidebar
