@@ -45,6 +45,11 @@ export const Route = createRootRoute({
     const { pathname } = useLocation();
     const isOnboarding = pathname.startsWith('/onboarding');
     const isDashboard = pathname.startsWith('/dashboard');
+    const hideHeader =
+      isOnboarding || isDashboard ||
+      pathname.startsWith('/predict') ||
+      pathname.startsWith('/profile') ||
+      pathname.startsWith('/game');
 
     return (
       <div
@@ -54,7 +59,7 @@ export const Route = createRootRoute({
           transition: 'background-color 0.5s ease',
         }}
       >
-        {!isOnboarding && !isDashboard && <Header />}
+        {!hideHeader && <Header />}
         <main
           className={
             isOnboarding ? 'px-8 py-4' : isDashboard ? 'w-full' : 'mx-auto max-w-6xl px-4 py-6'

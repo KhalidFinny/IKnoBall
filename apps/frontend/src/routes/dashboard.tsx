@@ -135,7 +135,7 @@ function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-stone-200">
-      <DashboardHeader userName={user.name} onSignOut={handleSignOut} />
+      <DashboardHeader userName={user.name} accentColor={team.primaryColor} onSignOut={handleSignOut} active="dashboard" />
 
       <div className="mx-auto grid max-w-[1920px] grid-cols-1 items-start gap-6 px-6 py-6 xl:grid-cols-[288px_minmax(0,1fr)_288px]">
         <StandingsSidebar
@@ -220,6 +220,7 @@ function DashboardPage() {
                 teams={teams}
                 heroDateKey={heroMeta?.dateKey ?? null}
                 loading={leagueGamesLoading}
+                onGameClick={(g) => navigate({ to: '/game/$gameId', params: { gameId: g.id } })}
               />
               <LeagueLeadersPanel leaders={leagueLeaders ?? null} loading={leagueLeadersLoading} />
             </>

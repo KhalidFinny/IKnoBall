@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate } from '@tanstack/react-router';
 import { Clock, MapPin, X } from 'lucide-react';
 import type { Game, TeamWithLeaders } from '../../lib/api';
 import { formatGameDate } from './shared';
@@ -13,28 +14,6 @@ function opponentOf(game: Game, team: TeamWithLeaders, teams?: TeamWithLeaders[]
   return { isHome, oppName, opp };
 }
 
-function showToast(message: string) {
-  if (typeof document === 'undefined') return;
-  const el = document.createElement('div');
-  el.setAttribute('role', 'status');
-  el.setAttribute('aria-live', 'polite');
-  el.textContent = message;
-  el.className =
-    'fixed bottom-6 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-brand-navyDark px-5 py-3 text-sm font-semibold text-white shadow-lg ring-1 ring-white/10 ' +
-    'transition-all duration-300';
-  el.style.opacity = '0';
-  el.style.transform = 'translate(-50%, 8px)';
-  document.body.appendChild(el);
-  requestAnimationFrame(() => {
-    el.style.opacity = '1';
-    el.style.transform = 'translate(-50%, 0)';
-  });
-  setTimeout(() => {
-    el.style.opacity = '0';
-    el.style.transform = 'translate(-50%, 8px)';
-    setTimeout(() => el.remove(), 300);
-  }, 2600);
-}
 export function GameDetailsPopup({
   game,
   team,
@@ -52,6 +31,7 @@ export function GameDetailsPopup({
   const cardRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const prevFocusRef = useRef<HTMLElement | null>(null);
+  const navigate = useNavigate();
   const [render, setRender] = useState(open);
   const [visible, setVisible] = useState(false);
 
@@ -183,8 +163,9 @@ export function GameDetailsPopup({
 
   const handlePredict = () => {
     onClose();
-    // slight delay so toast appears after close animation starts
-    setTimeout(() => showToast('Predictions coming soon'), 180);
+    if (game) {
+      navigate({ to: '/game/$gameId', params: { gameId: game.id } });
+    }
   };
 
   const content = (

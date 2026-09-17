@@ -1,6 +1,8 @@
-import { format } from 'date-fns';
-
 import type { ReactNode } from 'react';
+
+import { formatGameDate, hexLuminance } from '../../lib/game-utils';
+
+export { formatGameDate, hexLuminance };
 
 /* ── Panels ──────────────────────────────────────────────── */
 
@@ -45,19 +47,4 @@ export function EmptyState({ message }: { message: string }) {
       <p className="text-base text-stone-600">{message}</p>
     </div>
   );
-}
-/* ── Helpers ─────────────────────────────────────────────── */
-
-export function formatGameDate(value: string, pattern: string): string {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return format(date, pattern);
-}
-
-export function hexLuminance(hex: string): number {
-  const r = parseInt(hex.slice(1, 3), 16) / 255;
-  const g = parseInt(hex.slice(3, 5), 16) / 255;
-  const b = parseInt(hex.slice(5, 7), 16) / 255;
-  const toLinear = (c: number) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
-  return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
 }

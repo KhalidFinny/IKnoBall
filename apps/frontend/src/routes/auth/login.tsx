@@ -41,19 +41,22 @@ function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-[70vh] items-center justify-center">
-      <div className="w-full max-w-sm rounded-lg border border-court-200 bg-white p-8">
-        <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-basketball-500 text-base font-bold text-white shadow-sm">
+    <div className="flex min-h-[70vh] items-center justify-center px-4">
+      <div className="w-full max-w-sm overflow-hidden rounded-2xl border border-brand-line bg-white shadow-xl">
+        <div className="bg-brand-navyDark px-8 py-6 text-center">
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-brand-red font-heading text-xl font-black text-white shadow-md">
             IK
           </div>
-          <h1 className="text-xl font-semibold text-stone-900">Sign in</h1>
-          <p className="mt-1 text-sm text-stone-500">Welcome back to IKnoBall</p>
+          <h1 className="font-heading text-2xl font-black uppercase tracking-wide text-white">
+            Sign in
+          </h1>
+          <p className="mt-1 text-sm text-white/70">Welcome back to IKnoBall</p>
         </div>
 
+        <div className="px-8 py-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-stone-700">
+            <label htmlFor="email" className="mb-1 block text-sm font-semibold text-brand-ink">
               Email
             </label>
             <input
@@ -63,13 +66,13 @@ function LoginPage() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-md border border-court-200 bg-white px-3 py-2 text-sm text-stone-900 placeholder-stone-400 outline-none transition-colors focus:border-basketball-400 focus:ring-1 focus:ring-basketball-400"
+              className="w-full rounded-lg border border-brand-line bg-white px-3 py-2.5 text-sm text-brand-ink placeholder-stone-400 outline-none transition-colors focus:border-brand-navy focus:ring-1 focus:ring-brand-navy"
               placeholder="you@example.com"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium text-stone-700">
+            <label htmlFor="password" className="mb-1 block text-sm font-semibold text-brand-ink">
               Password
             </label>
             <input
@@ -79,13 +82,13 @@ function LoginPage() {
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-md border border-court-200 bg-white px-3 py-2 text-sm text-stone-900 placeholder-stone-400 outline-none transition-colors focus:border-basketball-400 focus:ring-1 focus:ring-basketball-400"
+              className="w-full rounded-lg border border-brand-line bg-white px-3 py-2.5 text-sm text-brand-ink placeholder-stone-400 outline-none transition-colors focus:border-brand-navy focus:ring-1 focus:ring-brand-navy"
               placeholder="••••••••"
             />
           </div>
 
           {error && errorCode === 'EMAIL_NOT_VERIFIED' ? (
-            <div className="rounded-md bg-amber-50 px-3 py-3 text-sm">
+            <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-3 text-sm">
               <p className="font-medium text-amber-800">Email not verified</p>
               <p className="mt-1 text-amber-700">
                 A new verification link has been sent to your email. Check your inbox or{' '}
@@ -100,28 +103,32 @@ function LoginPage() {
               </p>
             </div>
           ) : error ? (
-            <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
+            <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
+              {error}
+            </p>
           ) : null}
 
           <button
             type="submit"
             disabled={signIn.isPending}
-            className="w-full rounded-md bg-basketball-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-basketball-600 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-full bg-brand-navyDark px-4 py-3 text-sm font-extrabold uppercase tracking-widest text-white transition-colors hover:bg-brand-navy disabled:cursor-not-allowed disabled:opacity-60"
           >
             {signIn.isPending ? 'Signing in…' : 'Sign in'}
           </button>
         </form>
 
         <div className="relative my-6 flex items-center">
-          <div className="flex-grow border-t border-court-200" />
+          <div className="flex-grow border-t border-brand-line" />
           <span className="mx-3 text-xs font-medium uppercase tracking-wider text-stone-400">
             or
           </span>
-          <div className="flex-grow border-t border-court-200" />
+          <div className="flex-grow border-t border-brand-line" />
         </div>
 
         {discordError && (
-          <p className="mb-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{discordError}</p>
+          <p className="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
+            {discordError}
+          </p>
         )}
 
         <button
@@ -133,16 +140,16 @@ function LoginPage() {
               onError: (err) => setDiscordError(err.message),
             });
           }}
-          className="flex w-full items-center justify-center gap-2 rounded-md bg-[#5865F2] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#4752C4] disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex w-full items-center justify-center gap-2 rounded-full bg-[#5865F2] px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-[#4752C4] disabled:cursor-not-allowed disabled:opacity-60"
         >
           <FaDiscord className="h-4 w-4 shrink-0" />
           {discordSignIn.isPending ? 'Redirecting…' : 'Continue with Discord'}
         </button>
 
-        <div className="mt-4 flex flex-col items-center gap-2 text-sm text-stone-500">
+        <div className="mt-5 flex flex-col items-center gap-2 text-sm text-stone-500">
           <Link
             to="/auth/forgot-password"
-            className="text-stone-600 underline-offset-2 hover:text-basketball-600 hover:underline"
+            className="text-stone-600 underline-offset-2 hover:text-brand-navy hover:underline"
           >
             Forgot your password?
           </Link>
@@ -150,11 +157,12 @@ function LoginPage() {
             No account?{' '}
             <Link
               to="/auth/register"
-              className="font-medium text-basketball-600 underline-offset-2 hover:text-basketball-700 hover:underline"
+              className="font-semibold text-brand-navy underline-offset-2 hover:text-brand-red hover:underline"
             >
               Create one
             </Link>
           </span>
+        </div>
         </div>
       </div>
     </div>

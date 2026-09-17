@@ -1,14 +1,9 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 import { MapPin } from 'lucide-react';
 import type { Game, TeamWithLeaders } from '../../lib/api';
 import { useTopPlayers } from '../../lib/api';
-
-const ABBR_MAP: Record<string, string> = { BKN: 'BRK' };
-
-function canonicalAbbr(tricode: string | null | undefined): string {
-  if (!tricode) return '';
-  return ABBR_MAP[tricode] ?? tricode;
-}
+import { canonicalAbbr, formatTimeET, getGameStatus, getSeasonBadge } from '../../lib/game-utils';
 
 function getTeamByTricode(
   tricode: string | null | undefined,
@@ -18,63 +13,8 @@ function getTeamByTricode(
   return byAbbr.get(abbr) ?? null;
 }
 
-function getGameStatus(g: Game): 'final' | 'live' | 'scheduled' {
-  const s = (g.status ?? '').toLowerCase();
-  if (s.includes('final')) return 'final';
-  if (
-    s.includes('live') ||
-    s.includes('in progress') ||
-    s.includes('halftime') ||
-    s.includes('q1') ||
-    s.includes('q2') ||
-    s.includes('q3') ||
-    s.includes('q4') ||
-    s.includes('ot')
-  ) {
-    return 'live';
-  }
-  if (s.includes('scheduled') || s === '') return 'scheduled';
-  if (/q[1-4]|ot|half/i.test(s)) return 'live';
-  return 'scheduled';
-}
-
 function formatHeroDateLabel(date: Date): string {
   return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-}
-
-function formatTimeET(dateStr: string): string {
-  try {
-    const d = new Date(dateStr);
-    if (Number.isNaN(d.getTime())) return '';
-    return d.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      timeZone: 'America/New_York',
-    });
-  } catch {
-    return '';
-  }
-}
-
-function getSeasonBadge(g: Game): {
-  label: string;
-  detail?: string;
-  variant: 'preseason' | 'playoffs' | 'allstar' | 'regular';
-} | null {
-  const label = (g.gameLabel ?? '').trim();
-  const series = (g.seriesText ?? '').trim();
-  const sub = (g.gameSubLabel ?? '').trim();
-  if (label === 'Preseason') return { label: 'Preseason', variant: 'preseason' };
-  if (label === 'All-Star' || label === 'All-Star Championship')
-    return { label: 'All-Star', variant: 'allstar' };
-  if (series) return { label: 'Playoffs', detail: series || sub, variant: 'playoffs' };
-  if (label) {
-    if (label.toLowerCase().includes('playoff'))
-      return { label, detail: series || sub, variant: 'playoffs' };
-    return { label, variant: 'regular' };
-  }
-  // empty label = Regular Season
-  return { label: 'Regular Season', variant: 'regular' };
 }
 
 function getHeroSeasonSummary(
@@ -89,28 +29,6 @@ function getHeroSeasonSummary(
   const same = badges.every((b) => b.label === first && b.variant === badges[0].variant);
   if (same) return { label: first, variant: badges[0].variant };
   return { label: 'Mixed', variant: 'mixed' as const };
-}
-
-function showToast(message: string) {
-  if (typeof document === 'undefined') return;
-  const el = document.createElement('div');
-  el.setAttribute('role', 'status');
-  el.textContent = message;
-  el.className =
-    'fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-full bg-brand-navyDark px-5 py-3 text-sm font-semibold text-white shadow-lg ring-1 ring-white/10 ' +
-    'transition-all duration-300';
-  el.style.opacity = '0';
-  el.style.transform = 'translate(-50%, 8px)';
-  document.body.appendChild(el);
-  requestAnimationFrame(() => {
-    el.style.opacity = '1';
-    el.style.transform = 'translate(-50%, 0)';
-  });
-  setTimeout(() => {
-    el.style.opacity = '0';
-    el.style.transform = 'translate(-50%, 8px)';
-    setTimeout(() => el.remove(), 300);
-  }, 2600);
 }
 
 export function computeHero(
@@ -166,6 +84,7 @@ function HeroSlide({
   byAbbr: Map<string, TeamWithLeaders>;
   showTopPlayer: boolean;
 }) {
+  const navigate = useNavigate();
   const away = getTeamByTricode(g.awayTricode ?? g.awayTeam, byAbbr);
   const home = getTeamByTricode(g.homeTricode ?? g.homeTeam, byAbbr);
   const awayColor = away?.primaryColor ?? '#2B2B2B';
@@ -438,22 +357,26 @@ function HeroSlide({
               {g.arenaName ? g.arenaName : `${awayAbbr} @ ${homeAbbr}`}
             </span>
             {isFinal ? (
-              <span className="rounded-full border border-white/20 bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white/70">
+              <button
+                type="button"
+                onClick={() => navigate({ to: '/game/$gameId', params: { gameId: g.id } })}
+                className="rounded-full border border-white/20 bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white/70 transition hover:bg-white/25 hover:text-white"
+              >
                 View Recap
-              </span>
+              </button>
             ) : isLive ? (
               <button
                 type="button"
-                onClick={() => showToast('Predictions coming soon')}
-                className="rounded-full bg-brand-red px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white shadow"
+                onClick={() => navigate({ to: '/game/$gameId', params: { gameId: g.id } })}
+                className="rounded-full bg-brand-red px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white shadow transition hover:brightness-110"
               >
                 Watch Live
               </button>
             ) : (
               <button
                 type="button"
-                onClick={() => showToast('Predictions coming soon')}
-                className="rounded-full bg-white px-6 py-2.5 text-xs font-black uppercase tracking-widest text-brand-navy shadow"
+                onClick={() => navigate({ to: '/game/$gameId', params: { gameId: g.id } })}
+                className="rounded-full bg-white px-6 py-2.5 text-xs font-black uppercase tracking-widest text-brand-navy shadow transition hover:brightness-95"
               >
                 Predict →
               </button>

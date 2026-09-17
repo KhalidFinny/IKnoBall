@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
 import type { Game, TeamWithLeaders } from '../../lib/api';
+import { canonicalAbbr, getGameStatus } from '../../lib/game-utils';
 
-const ABBR_MAP: Record<string, string> = { BKN: 'BRK' };
-
-function canonicalAbbr(tricode: string | null | undefined, fallback: string): string {
-  if (tricode) return ABBR_MAP[tricode] ?? tricode;
-  // fallback may be full name e.g. "Golden State Warriors" - map via teams lookup elsewhere
+function abbrFromFallback(tricode: string | null | undefined, fallback: string): string {
+  if (tricode) return canonicalAbbr(tricode);
+  // fallback may be a full name e.g. "Golden State Warriors"
   return fallback.slice(0, 3).toUpperCase();
 }
 
@@ -139,12 +138,8 @@ export function SevenDayStrip({
               <div className="flex flex-1 flex-col gap-1.5 p-1.5">
                 {dayGames.length ? (
                   dayGames.map((g) => {
-                    const awayAbbr = g.awayTricode
-                      ? (ABBR_MAP[g.awayTricode] ?? g.awayTricode)
-                      : canonicalAbbr(null, g.awayTeam);
-                    const homeAbbr = g.homeTricode
-                      ? (ABBR_MAP[g.homeTricode] ?? g.homeTricode)
-                      : canonicalAbbr(null, g.homeTeam);
+                    const awayAbbr = abbrFromFallback(g.awayTricode, g.awayTeam);
+                    const homeAbbr = abbrFromFallback(g.homeTricode, g.homeTeam);
 
                     // resolve logos via teams map
                     const awayTeam =
@@ -152,10 +147,9 @@ export function SevenDayStrip({
                     const homeTeam =
                       byAbbr.byAbbr.get(homeAbbr) ?? byAbbr.byFull.get(g.homeTeam) ?? null;
 
-                    const s = (g.status ?? '').toLowerCase();
-                    const isFinal = s.includes('final');
-                    const isLive =
-                      s.includes('live') || s.includes('in progress') || s.includes('halftime');
+                    const status = getGameStatus(g);
+                    const isFinal = status === 'final';
+                    const isLive = status === 'live';
 
                     let timeOrScore = '';
                     if (isFinal) timeOrScore = `F ${g.awayScore ?? 0}-${g.homeScore ?? 0}`;

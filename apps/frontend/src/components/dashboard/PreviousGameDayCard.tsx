@@ -1,10 +1,9 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import type { Game, TeamWithLeaders } from '../../lib/api';
+import { canonicalAbbr } from '../../lib/game-utils';
 
-const ABBR_MAP: Record<string, string> = { BKN: 'BRK' };
-
-function canonicalAbbr(tricode: string | null | undefined, fallback: string): string {
-  if (tricode) return ABBR_MAP[tricode] ?? tricode;
+function abbrFromFallback(tricode: string | null | undefined, fallback: string): string {
+  if (tricode) return canonicalAbbr(tricode);
   return fallback.slice(0, 3).toUpperCase();
 }
 
@@ -163,12 +162,8 @@ export function PreviousGameDayCard({
   const showSlider = games.length > itemsPerPage;
 
   const renderGameCard = (g: Game) => {
-    const awayAbbr = g.awayTricode
-      ? (ABBR_MAP[g.awayTricode] ?? g.awayTricode)
-      : canonicalAbbr(null, g.awayTeam);
-    const homeAbbr = g.homeTricode
-      ? (ABBR_MAP[g.homeTricode] ?? g.homeTricode)
-      : canonicalAbbr(null, g.homeTeam);
+    const awayAbbr = abbrFromFallback(g.awayTricode, g.awayTeam);
+    const homeAbbr = abbrFromFallback(g.homeTricode, g.homeTeam);
     const awayTeam = byAbbr.byAbbr.get(awayAbbr) ?? byAbbr.byFull.get(g.awayTeam) ?? null;
     const homeTeam = byAbbr.byAbbr.get(homeAbbr) ?? byAbbr.byFull.get(g.homeTeam) ?? null;
 

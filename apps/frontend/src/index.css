@@ -48,3 +48,13 @@ h6 {
     animation: none;
   }
 }
+@keyframes confetti-drop {
+  0% {
+    transform: translateY(-8px) rotate(45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(220px) rotate(320deg);
+    opacity: 0;
+  }
+}
